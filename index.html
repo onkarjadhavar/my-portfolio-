@@ -32,6 +32,9 @@
     <!-- SCROLL PROGRESS INDICATOR -->
     <div class="scroll-progress-bar" id="scroll-progress" aria-hidden="true"></div>
 
+    <!-- AMBIENT CURSOR GLOW (DESKTOP) -->
+    <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+
     <!-- SITE HEADER / NAVIGATION -->
     <header class="site-header" id="site-header">
       <nav class="container nav" aria-label="Main Navigation">
@@ -52,6 +55,7 @@
           <a href="#projects"><i class="fas fa-code nav-icon"></i> Projects</a>
           <a href="#achievements"><i class="fas fa-award nav-icon"></i> Achievements</a>
           <a href="#certifications"><i class="fas fa-certificate nav-icon"></i> Certifications</a>
+          <a href="#gallery"><i class="fas fa-images nav-icon"></i> Gallery</a>
           <a href="#contact" class="nav-cta">
             <span>Get in Touch</span>
             <i class="fas fa-arrow-right"></i>
@@ -67,6 +71,7 @@
         <div class="hero-bg-grid" aria-hidden="true"></div>
         <div class="hero-glow-1" aria-hidden="true"></div>
         <div class="hero-glow-2" aria-hidden="true"></div>
+        <canvas id="hero-particles" class="hero-particles" aria-hidden="true"></canvas>
 
         <div class="container hero-grid">
 
@@ -1516,7 +1521,431 @@
         </div>
       </section>
 
-      <!-- 9. CONTACT & INQUIRY SECTION -->
+      <!-- 9. IMAGE GALLERY / SLIDING BAR SECTION -->
+      <section id="gallery" class="section gallery-section">
+        <div class="container">
+          
+          <div class="gallery-header-wrap reveal">
+            <div class="section-heading-col">
+              <div class="section-tag">
+                <i class="fas fa-images"></i>
+                <span>PROFESSIONAL MOMENTS</span>
+              </div>
+              <h2>Image Gallery / <span class="text-grad">Sliding Bar</span></h2>
+              <p class="section-sub">
+                Explore key moments in leadership, hackathon participations, academic keynotes, team campaigns, and campus milestones.
+              </p>
+            </div>
+
+            <div class="gallery-auto-status">
+              <span class="pulse-dot"></span>
+              <span>Smooth Auto-Scroll &bull; Hover to Pause &bull; Click to Expand</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FULL-WIDTH INFINITE HORIZONTAL MOVING MARQUEE -->
+        <div class="gallery-marquee-viewport reveal delay-1" id="gallery-viewport">
+          <div class="gallery-marquee-track" id="gallery-track">
+
+            <!-- Card 1: Magazine Secretary -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery1.jpg', 'Magazine Secretary: Accepting the Offer Letter as Magazine Secretary')">
+              <div class="gallery-thumb">
+                <img src="images/gallery1.jpg" alt="Magazine Secretary" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-id-badge"></i> Student Council</span>
+                <h3 class="gallery-item-title">Magazine Secretary</h3>
+                <p class="gallery-item-caption">Accepting the Offer Letter as Magazine Secretary</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Presentation Event -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery2.jpg', 'Presentation Event: Presentation Event and Academic Engagement')">
+              <div class="gallery-thumb">
+                <img src="images/gallery2.jpg" alt="Presentation Event" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-microphone"></i> Presentation</span>
+                <h3 class="gallery-item-title">Presentation Event</h3>
+                <p class="gallery-item-caption">Presentation Event and Academic Engagement</p>
+              </div>
+            </div>
+
+            <!-- Card 3: Vice President -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery3.jpg', 'Vice President: Accepting the Offer Letter as Vice President')">
+              <div class="gallery-thumb">
+                <img src="images/gallery3.jpg" alt="Vice President" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-user-tie"></i> CSESA Leadership</span>
+                <h3 class="gallery-item-title">Vice President</h3>
+                <p class="gallery-item-caption">Accepting the Offer Letter as Vice President</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Vice President Poster -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery4.jpg', 'Vice President Poster: Vice President Campaign Poster')">
+              <div class="gallery-thumb">
+                <img src="images/gallery4.jpg" alt="Vice President Poster" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-bullhorn"></i> Official Poster</span>
+                <h3 class="gallery-item-title">Vice President Poster</h3>
+                <p class="gallery-item-caption">Vice President Campaign Poster</p>
+              </div>
+            </div>
+
+            <!-- Card 5: Campaign Leadership -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery5.jpg', 'Campaign Leadership: Leading the Campaign')">
+              <div class="gallery-thumb">
+                <img src="images/gallery5.jpg" alt="Campaign Leadership" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-users-rays"></i> Campaign</span>
+                <h3 class="gallery-item-title">Campaign Leadership</h3>
+                <p class="gallery-item-caption">Leading the Campaign</p>
+              </div>
+            </div>
+
+            <!-- Card 6: TechnoVers Event -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery6.jpg', 'TechnoVers Event: TechnoVers Event — Vice President, CSESA')">
+              <div class="gallery-thumb">
+                <img src="images/gallery6.jpg" alt="TechnoVers Event" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-calendar-check"></i> Flagship Event</span>
+                <h3 class="gallery-item-title">TechnoVers Event</h3>
+                <p class="gallery-item-caption">TechnoVers Event — Vice President, CSESA</p>
+              </div>
+            </div>
+
+            <!-- Card 7: CSESA Team -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery7.jpg', 'CSESA Team: CSESA Team and Leadership')">
+              <div class="gallery-thumb">
+                <img src="images/gallery7.jpg" alt="CSESA Team" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-people-group"></i> Department Team</span>
+                <h3 class="gallery-item-title">CSESA Team</h3>
+                <p class="gallery-item-caption">CSESA Team and Leadership</p>
+              </div>
+            </div>
+
+            <!-- Card 8: RIT College Hackathon -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery8.jpg', 'RIT College Hackathon: RIT College Hackathon — Hackathon Team')">
+              <div class="gallery-thumb">
+                <img src="images/gallery8.jpg" alt="RIT College Hackathon" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-laptop-code"></i> Hackathon</span>
+                <h3 class="gallery-item-title">RIT College Hackathon</h3>
+                <p class="gallery-item-caption">RIT College Hackathon — Hackathon Team</p>
+              </div>
+            </div>
+
+            <!-- Card 9: Karmayogir Bhavrao Patil Hackathon -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery9.jpg', 'Karmayogir Bhavrao Patil Hackathon: Karmayogir Bhavrao Patil Hackathon — Team Participation')">
+              <div class="gallery-thumb">
+                <img src="images/gallery9.jpg" alt="Karmayogir Bhavrao Patil Hackathon" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-code-fork"></i> Hackathon</span>
+                <h3 class="gallery-item-title">Karmayogir Bhavrao Patil Hackathon</h3>
+                <p class="gallery-item-caption">Karmayogir Bhavrao Patil Hackathon — Team Participation</p>
+              </div>
+            </div>
+
+            <!-- Card 10: Magazine Reveal -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery11.jpg', 'Magazine Reveal: Revealing the Magazine with the Magazine Head')">
+              <div class="gallery-thumb">
+                <img src="images/gallery11.jpg" alt="Magazine Reveal" class="img-align-bottom" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-book-open"></i> Magazine Reveal</span>
+                <h3 class="gallery-item-title">Magazine Reveal</h3>
+                <p class="gallery-item-caption">Revealing the Magazine with the Magazine Head</p>
+              </div>
+            </div>
+
+            <!-- Card 11: Magazine Committee -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery12.jpg', 'Magazine Committee: Revealing the Magazine with the Magazine Committee')">
+              <div class="gallery-thumb">
+                <img src="images/gallery12.jpg" alt="Magazine Committee" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-book-bookmark"></i> Committee</span>
+                <h3 class="gallery-item-title">Magazine Committee</h3>
+                <p class="gallery-item-caption">Revealing the Magazine with the Magazine Committee</p>
+              </div>
+            </div>
+
+            <!-- Card 12: Magazine Committee Leadership -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery13.jpg', 'Magazine Committee Leadership: Leading the Magazine Committee Team')">
+              <div class="gallery-thumb">
+                <img src="images/gallery13.jpg" alt="Magazine Committee Leadership" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-award"></i> Committee Leadership</span>
+                <h3 class="gallery-item-title">Magazine Committee Leadership</h3>
+                <p class="gallery-item-caption">Leading the Magazine Committee Team</p>
+              </div>
+            </div>
+
+            <!-- Card 13: NEC Team Lead -->
+            <div class="gallery-card" onclick="openLightbox('images/gallery14.jpg', 'NEC Team Lead: Team Lead — NEC (E-Cell IIT Bombay)')">
+              <div class="gallery-thumb">
+                <img src="images/gallery14.jpg" alt="NEC Team Lead" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-rocket"></i> E-Cell IIT Bombay</span>
+                <h3 class="gallery-item-title">NEC Team Lead</h3>
+                <p class="gallery-item-caption">Team Lead — NEC</p>
+              </div>
+            </div>
+
+            <!-- CLONED DUPLICATES FOR SEAMLESS 100% INFINITE LOOP -->
+            <!-- Clone 1: Magazine Secretary -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery1.jpg', 'Magazine Secretary: Accepting the Offer Letter as Magazine Secretary')">
+              <div class="gallery-thumb">
+                <img src="images/gallery1.jpg" alt="Magazine Secretary" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-id-badge"></i> Student Council</span>
+                <h3 class="gallery-item-title">Magazine Secretary</h3>
+                <p class="gallery-item-caption">Accepting the Offer Letter as Magazine Secretary</p>
+              </div>
+            </div>
+
+            <!-- Clone 2: Presentation Event -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery2.jpg', 'Presentation Event: Presentation Event and Academic Engagement')">
+              <div class="gallery-thumb">
+                <img src="images/gallery2.jpg" alt="Presentation Event" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-microphone"></i> Presentation</span>
+                <h3 class="gallery-item-title">Presentation Event</h3>
+                <p class="gallery-item-caption">Presentation Event and Academic Engagement</p>
+              </div>
+            </div>
+
+            <!-- Clone 3: Vice President -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery3.jpg', 'Vice President: Accepting the Offer Letter as Vice President')">
+              <div class="gallery-thumb">
+                <img src="images/gallery3.jpg" alt="Vice President" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-user-tie"></i> CSESA Leadership</span>
+                <h3 class="gallery-item-title">Vice President</h3>
+                <p class="gallery-item-caption">Accepting the Offer Letter as Vice President</p>
+              </div>
+            </div>
+
+            <!-- Clone 4: Vice President Poster -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery4.jpg', 'Vice President Poster: Vice President Campaign Poster')">
+              <div class="gallery-thumb">
+                <img src="images/gallery4.jpg" alt="Vice President Poster" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-bullhorn"></i> Official Poster</span>
+                <h3 class="gallery-item-title">Vice President Poster</h3>
+                <p class="gallery-item-caption">Vice President Campaign Poster</p>
+              </div>
+            </div>
+
+            <!-- Clone 5: Campaign Leadership -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery5.jpg', 'Campaign Leadership: Leading the Campaign')">
+              <div class="gallery-thumb">
+                <img src="images/gallery5.jpg" alt="Campaign Leadership" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-users-rays"></i> Campaign</span>
+                <h3 class="gallery-item-title">Campaign Leadership</h3>
+                <p class="gallery-item-caption">Leading the Campaign</p>
+              </div>
+            </div>
+
+            <!-- Clone 6: TechnoVers Event -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery6.jpg', 'TechnoVers Event: TechnoVers Event — Vice President, CSESA')">
+              <div class="gallery-thumb">
+                <img src="images/gallery6.jpg" alt="TechnoVers Event" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-calendar-check"></i> Flagship Event</span>
+                <h3 class="gallery-item-title">TechnoVers Event</h3>
+                <p class="gallery-item-caption">TechnoVers Event — Vice President, CSESA</p>
+              </div>
+            </div>
+
+            <!-- Clone 7: CSESA Team -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery7.jpg', 'CSESA Team: CSESA Team and Leadership')">
+              <div class="gallery-thumb">
+                <img src="images/gallery7.jpg" alt="CSESA Team" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-people-group"></i> Department Team</span>
+                <h3 class="gallery-item-title">CSESA Team</h3>
+                <p class="gallery-item-caption">CSESA Team and Leadership</p>
+              </div>
+            </div>
+
+            <!-- Clone 8: RIT College Hackathon -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery8.jpg', 'RIT College Hackathon: RIT College Hackathon — Hackathon Team')">
+              <div class="gallery-thumb">
+                <img src="images/gallery8.jpg" alt="RIT College Hackathon" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-laptop-code"></i> Hackathon</span>
+                <h3 class="gallery-item-title">RIT College Hackathon</h3>
+                <p class="gallery-item-caption">RIT College Hackathon — Hackathon Team</p>
+              </div>
+            </div>
+
+            <!-- Clone 9: Karmayogir Bhavrao Patil Hackathon -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery9.jpg', 'Karmayogir Bhavrao Patil Hackathon: Karmayogir Bhavrao Patil Hackathon — Team Participation')">
+              <div class="gallery-thumb">
+                <img src="images/gallery9.jpg" alt="Karmayogir Bhavrao Patil Hackathon" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-code-fork"></i> Hackathon</span>
+                <h3 class="gallery-item-title">Karmayogir Bhavrao Patil Hackathon</h3>
+                <p class="gallery-item-caption">Karmayogir Bhavrao Patil Hackathon — Team Participation</p>
+              </div>
+            </div>
+
+            <!-- Clone 10: Magazine Reveal -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery11.jpg', 'Magazine Reveal: Revealing the Magazine with the Magazine Head')">
+              <div class="gallery-thumb">
+                <img src="images/gallery11.jpg" alt="Magazine Reveal" class="img-align-bottom" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-book-open"></i> Magazine Reveal</span>
+                <h3 class="gallery-item-title">Magazine Reveal</h3>
+                <p class="gallery-item-caption">Revealing the Magazine with the Magazine Head</p>
+              </div>
+            </div>
+
+            <!-- Clone 11: Magazine Committee -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery12.jpg', 'Magazine Committee: Revealing the Magazine with the Magazine Committee')">
+              <div class="gallery-thumb">
+                <img src="images/gallery12.jpg" alt="Magazine Committee" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-book-bookmark"></i> Committee</span>
+                <h3 class="gallery-item-title">Magazine Committee</h3>
+                <p class="gallery-item-caption">Revealing the Magazine with the Magazine Committee</p>
+              </div>
+            </div>
+
+            <!-- Clone 12: Magazine Committee Leadership -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery13.jpg', 'Magazine Committee Leadership: Leading the Magazine Committee Team')">
+              <div class="gallery-thumb">
+                <img src="images/gallery13.jpg" alt="Magazine Committee Leadership" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-award"></i> Committee Leadership</span>
+                <h3 class="gallery-item-title">Magazine Committee Leadership</h3>
+                <p class="gallery-item-caption">Leading the Magazine Committee Team</p>
+              </div>
+            </div>
+
+            <!-- Clone 13: NEC Team Lead -->
+            <div class="gallery-card" aria-hidden="true" onclick="openLightbox('images/gallery14.jpg', 'NEC Team Lead: Team Lead — NEC (E-Cell IIT Bombay)')">
+              <div class="gallery-thumb">
+                <img src="images/gallery14.jpg" alt="NEC Team Lead" loading="lazy" />
+                <div class="gallery-overlay">
+                  <div class="gallery-zoom-circle"><i class="fas fa-magnifying-glass-plus"></i></div>
+                </div>
+              </div>
+              <div class="gallery-card-body">
+                <span class="gallery-category"><i class="fas fa-rocket"></i> E-Cell IIT Bombay</span>
+                <h3 class="gallery-item-title">NEC Team Lead</h3>
+                <p class="gallery-item-caption">Team Lead — NEC</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 10. CONTACT & INQUIRY SECTION -->
       <section id="contact" class="section contact-section alt-bg">
         <div class="container">
           <div class="contact-box reveal">

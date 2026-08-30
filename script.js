@@ -5,6 +5,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // --- 1. HEADER SCROLL STATE & TOP PROGRESS BAR ---
   const header = document.querySelector('.site-header');
   const progressBar = document.getElementById('scroll-progress');
@@ -49,7 +51,167 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 3. SCROLL REVEAL OBSERVER ---
+  // --- 3. INTERACTIVE HERO AI / PARTICLE CANVAS ---
+  const canvas = document.getElementById('hero-particles');
+  const heroSection = document.getElementById('home');
+  
+  if (canvas && heroSection && !prefersReducedMotion) {
+    const ctx = canvas.getContext('2d');
+    let width = 0;
+    let height = 0;
+    let particles = [];
+    let animationId = null;
+    let isHeroVisible = true;
+
+    const mouse = { x: -1000, y: -1000, radius: 140 };
+
+    const resizeCanvas = () => {
+      const rect = heroSection.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+      initParticles();
+    };
+
+    const initParticles = () => {
+      particles = [];
+      const count = Math.min(Math.floor((width * height) / 14000), 55);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: (Math.random() - 0.5) * 0.45,
+          radius: Math.random() * 1.5 + 0.8,
+          baseAlpha: Math.random() * 0.45 + 0.25
+        });
+      }
+    };
+
+    const drawParticles = () => {
+      if (!isHeroVisible) return;
+      ctx.clearRect(0, 0, width, height);
+
+      // Connect near particles
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        p1.x += p1.vx;
+        p1.y += p1.vy;
+
+        // Wrap edges
+        if (p1.x < 0) p1.x = width;
+        if (p1.x > width) p1.x = 0;
+        if (p1.y < 0) p1.y = height;
+        if (p1.y > height) p1.y = 0;
+
+        // Mouse interaction
+        const dxMouse = mouse.x - p1.x;
+        const dyMouse = mouse.y - p1.y;
+        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+        if (distMouse < mouse.radius && distMouse > 0) {
+          const force = (mouse.radius - distMouse) / mouse.radius;
+          p1.x -= (dxMouse / distMouse) * force * 1.2;
+          p1.y -= (dyMouse / distMouse) * force * 1.2;
+        }
+
+        // Draw node
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p1.baseAlpha})`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 115) {
+            const alpha = (1 - dist / 115) * 0.18;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(203, 213, 225, ${alpha})`;
+            ctx.lineWidth = 0.75;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(drawParticles);
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    });
+
+    // Pause canvas when offscreen to save 100% CPU
+    if ('IntersectionObserver' in window) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isHeroVisible = entry.isIntersecting;
+          if (isHeroVisible) {
+            if (!animationId) animationId = requestAnimationFrame(drawParticles);
+          } else {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+          }
+        });
+      }, { threshold: 0.05 });
+      heroObserver.observe(heroSection);
+    }
+
+    resizeCanvas();
+    drawParticles();
+  }
+
+  // --- 4. CURSOR GLOW FOLLOWER (DESKTOP) ---
+  const cursorGlow = document.getElementById('cursor-glow');
+  if (cursorGlow && !prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let currentX = mouseX;
+    let currentY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    }, { passive: true });
+
+    const updateCursorGlow = () => {
+      currentX += (mouseX - currentX) * 0.12;
+      currentY += (mouseY - currentY) * 0.12;
+      cursorGlow.style.left = `${currentX}px`;
+      cursorGlow.style.top = `${currentY}px`;
+      requestAnimationFrame(updateCursorGlow);
+    };
+    requestAnimationFrame(updateCursorGlow);
+  }
+
+  // --- 5. SPOTLIGHT CARDS MOUSE TRACKER ---
+  const spotlightCards = document.querySelectorAll('.project-card, .skill-card, .achieve-card, .resume-card, .stat-item, .gallery-card');
+  spotlightCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    }, { passive: true });
+  });
+
+  // --- 6. SCROLL REVEAL OBSERVER ---
   const revealElements = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
@@ -69,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => el.classList.add('visible'));
   }
 
-  // --- 4. ACTIVE NAV HIGHLIGHT ON SCROLL ---
+  // --- 7. ACTIVE NAV HIGHLIGHT ON SCROLL ---
   const sections = document.querySelectorAll('section[id]');
   const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
 
@@ -95,34 +257,36 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(sec => sectionObserver.observe(sec));
   }
 
-  // --- 5. 3D TILT EFFECT ON PROFILE CARD ---
-  const profileCard = document.getElementById('profile-card');
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // --- 8. 3D TILT EFFECT ON CARDS ---
+  const tiltElements = document.querySelectorAll('#profile-card, .project-card, .achieve-card');
+  if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+    tiltElements.forEach(card => {
+      const isProfile = card.id === 'profile-card';
+      const maxAngle = isProfile ? 5 : 3.5;
 
-  if (profileCard && !prefersReducedMotion) {
-    const handleTilt = (e) => {
-      const rect = profileCard.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const handleTilt = (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
 
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -maxAngle;
+        const rotateY = ((x - centerX) / centerX) * maxAngle;
 
-      const rotateX = ((y - centerY) / centerY) * -6;
-      const rotateY = ((x - centerX) / centerX) * 6;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      };
 
-      profileCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-    };
+      const resetTilt = () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      };
 
-    const resetTilt = () => {
-      profileCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-    };
-
-    profileCard.addEventListener('mousemove', handleTilt);
-    profileCard.addEventListener('mouseleave', resetTilt);
+      card.addEventListener('mousemove', handleTilt);
+      card.addEventListener('mouseleave', resetTilt);
+    });
   }
 
-  // --- 6. TYPEWRITER EFFECT ---
+  // --- 9. TYPEWRITER EFFECT ---
   const typedRoleEl = document.getElementById('typed-role');
   const roles = [
     'Generative AI Engineer',
@@ -167,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(typeText, 600);
   }
 
-  // --- 7. STATS COUNTER ANIMATION ---
+  // --- 10. STATS COUNTER ANIMATION ---
   const statNumbers = document.querySelectorAll('.stat-num');
   if ('IntersectionObserver' in window && statNumbers.length > 0) {
     const statsObserver = new IntersectionObserver((entries) => {
@@ -202,7 +366,149 @@ document.addEventListener('DOMContentLoaded', () => {
     statNumbers.forEach(num => statsObserver.observe(num));
   }
 
-  // --- 8. COPY RESUME MARKDOWN ---
+  // --- 11. IMAGE GALLERY / AUTOMATIC MOVING BAR + TOUCH DRAG ENGINE ---
+  const galleryTrack = document.getElementById('gallery-track');
+  const galleryViewport = document.getElementById('gallery-viewport');
+
+  if (galleryTrack && galleryViewport) {
+    let offset = 0;
+    const baseSpeed = 0.65; // slow smooth movement in pixels per frame
+    let isDragging = false;
+    let isHovered = false;
+    let isVisible = true;
+    let startX = 0;
+    let dragStartOffset = 0;
+    let hasMoved = false;
+
+    const getHalfWidth = () => {
+      return galleryTrack.scrollWidth / 2;
+    };
+
+    // RAF smooth auto-drift loop
+    const animateMarquee = () => {
+      const halfWidth = getHalfWidth();
+      if (!isDragging && !isHovered && isVisible && halfWidth > 0) {
+        offset -= baseSpeed;
+        if (offset <= -halfWidth) {
+          offset += halfWidth;
+        } else if (offset > 0) {
+          offset -= halfWidth;
+        }
+        galleryTrack.style.transform = `translate3d(${offset}px, 0, 0)`;
+      }
+      requestAnimationFrame(animateMarquee);
+    };
+
+    // Pause when offscreen
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+        });
+      }, { threshold: 0.05 });
+      observer.observe(galleryViewport);
+    }
+
+    // Hover pause
+    galleryViewport.addEventListener('mouseenter', () => {
+      isHovered = true;
+    });
+
+    galleryViewport.addEventListener('mouseleave', () => {
+      isHovered = false;
+      if (isDragging) {
+        isDragging = false;
+        galleryViewport.classList.remove('is-dragging');
+      }
+    });
+
+    // Touch & Mouse Drag Handlers
+    const startDrag = (clientX) => {
+      isDragging = true;
+      hasMoved = false;
+      startX = clientX;
+      dragStartOffset = offset;
+      galleryViewport.classList.add('is-dragging');
+    };
+
+    const moveDrag = (clientX) => {
+      if (!isDragging) return;
+      const deltaX = clientX - startX;
+      if (Math.abs(deltaX) > 6) {
+        hasMoved = true;
+      }
+      const halfWidth = getHalfWidth();
+      let newOffset = dragStartOffset + deltaX;
+
+      if (halfWidth > 0) {
+        while (newOffset <= -halfWidth) newOffset += halfWidth;
+        while (newOffset > 0) newOffset -= halfWidth;
+      }
+
+      offset = newOffset;
+      galleryTrack.style.transform = `translate3d(${offset}px, 0, 0)`;
+    };
+
+    const endDrag = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      galleryViewport.classList.remove('is-dragging');
+    };
+
+    // Mouse Events
+    galleryViewport.addEventListener('mousedown', (e) => {
+      startDrag(e.pageX);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        moveDrag(e.pageX);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        endDrag();
+      }
+    });
+
+    // Touch Events
+    galleryViewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        startDrag(e.touches[0].pageX);
+      }
+    }, { passive: true });
+
+    galleryViewport.addEventListener('touchmove', (e) => {
+      if (isDragging && e.touches.length === 1) {
+        moveDrag(e.touches[0].pageX);
+      }
+    }, { passive: true });
+
+    galleryViewport.addEventListener('touchend', () => {
+      endDrag();
+    }, { passive: true });
+
+    galleryViewport.addEventListener('touchcancel', () => {
+      endDrag();
+    }, { passive: true });
+
+    // Intercept card clicks if user was dragging
+    const cards = galleryTrack.querySelectorAll('.gallery-card');
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (hasMoved) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+        }
+      }, true);
+    });
+
+    // Start auto-drift animation
+    requestAnimationFrame(animateMarquee);
+  }
+
+  // --- 12. COPY RESUME MARKDOWN ---
   const copyMdBtn = document.getElementById('copy-markdown-btn');
   if (copyMdBtn) {
     copyMdBtn.addEventListener('click', () => {
