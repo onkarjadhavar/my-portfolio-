@@ -877,6 +877,113 @@ code {
   margin-bottom: 0 !important;
 }
 
+/* --- SPECIAL RESUME FEATURE BOX --- */
+.resume-feature-box {
+  background: linear-gradient(145deg, rgba(25, 28, 38, 0.95) 0%, rgba(14, 16, 22, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.5rem;
+  margin-top: 1.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  scroll-margin-top: 100px;
+  position: relative;
+  transition: all var(--transition-base);
+}
+
+.resume-feature-box:hover,
+.resume-feature-box:target {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(56, 189, 248, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.resume-feature-box:target {
+  animation: resumeHighlight 2s ease-out;
+}
+
+@keyframes resumeHighlight {
+  0% { border-color: var(--accent-cyan); box-shadow: 0 0 30px rgba(56, 189, 248, 0.4); }
+  100% { border-color: rgba(255, 255, 255, 0.15); }
+}
+
+.rfb-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.rfb-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-cyan);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.rfb-title-wrap {
+  flex: 1;
+}
+
+.rfb-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.rfb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.rfb-format {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.rfb-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.rfb-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0.15rem 0 0 0 !important;
+}
+
+.rfb-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rfb-actions .btn {
+  font-size: 0.84rem;
+  padding: 0.6rem 1.15rem;
+}
+
 .about-cta-row {
   display: flex;
   align-items: center;
