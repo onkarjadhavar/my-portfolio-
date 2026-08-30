@@ -5,13 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- 1. DYNAMIC YEAR ---
-  const yearEl = document.getElementById('year');
-  if (yearEl) {
-    yearEl.textContent = new Date().getFullYear();
-  }
-
-  // --- 2. HEADER SCROLL STATE & SCROLL PROGRESS ---
+  // --- 1. HEADER SCROLL STATE & TOP PROGRESS BAR ---
   const header = document.querySelector('.site-header');
   const progressBar = document.getElementById('scroll-progress');
 
@@ -36,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 
-  // --- 3. MOBILE MENU TOGGLE ---
+  // --- 2. MOBILE MENU TOGGLE ---
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.getElementById('nav-links');
 
@@ -55,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 4. SCROLL REVEAL OBSERVER ---
+  // --- 3. SCROLL REVEAL OBSERVER ---
   const revealElements = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
@@ -66,17 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      threshold: 0.1,
+      threshold: 0.08,
       rootMargin: '0px 0px -40px 0px'
     });
 
     revealElements.forEach(el => revealObserver.observe(el));
   } else {
-    // Fallback for older browsers
     revealElements.forEach(el => el.classList.add('visible'));
   }
 
-  // --- 5. ACTIVE NAV HIGHLIGHT ON SCROLL ---
+  // --- 4. ACTIVE NAV HIGHLIGHT ON SCROLL ---
   const sections = document.querySelectorAll('section[id]');
   const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
 
@@ -95,14 +88,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      threshold: 0.25,
+      threshold: 0.2,
       rootMargin: '-72px 0px -40% 0px'
     });
 
     sections.forEach(sec => sectionObserver.observe(sec));
   }
 
-  // --- 6. 3D TILT EFFECT ON PROFILE CARD ---
+  // --- 5. 3D TILT EFFECT ON PROFILE CARD ---
   const profileCard = document.getElementById('profile-card');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -115,8 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      const rotateX = ((y - centerY) / centerY) * -8;
-      const rotateY = ((x - centerX) / centerX) * 8;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
 
       profileCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
     };
@@ -129,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     profileCard.addEventListener('mouseleave', resetTilt);
   }
 
-  // --- 7. TYPEWRITER EFFECT ---
+  // --- 6. TYPEWRITER EFFECT ---
   const typedRoleEl = document.getElementById('typed-role');
   const roles = [
     'Generative AI Engineer',
@@ -156,15 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
       charIdx++;
     }
 
-    let typeSpeed = isDeleting ? 40 : 80;
+    let typeSpeed = isDeleting ? 35 : 75;
 
     if (!isDeleting && charIdx === currentRole.length) {
-      typeSpeed = 2200; // Pause at end of word
+      typeSpeed = 2000;
       isDeleting = true;
     } else if (isDeleting && charIdx === 0) {
       isDeleting = false;
       roleIdx = (roleIdx + 1) % roles.length;
-      typeSpeed = 400; // Pause before new word
+      typeSpeed = 400;
     }
 
     setTimeout(typeText, typeSpeed);
@@ -174,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(typeText, 600);
   }
 
-  // --- 8. STATS COUNTER ANIMATION ---
+  // --- 7. STATS COUNTER ANIMATION ---
   const statNumbers = document.querySelectorAll('.stat-num');
   if ('IntersectionObserver' in window && statNumbers.length > 0) {
     const statsObserver = new IntersectionObserver((entries) => {
@@ -183,14 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = entry.target;
         const targetVal = parseFloat(el.textContent.trim());
         const isFloat = el.textContent.includes('.');
-        let current = 0;
         const duration = 1200;
         const startTime = performance.now();
 
         const updateCounter = (currentTime) => {
           const elapsed = currentTime - startTime;
           const progress = Math.min(elapsed / duration, 1);
-          // Ease out quad
           const easeProgress = 1 - (1 - progress) * (1 - progress);
           const val = easeProgress * targetVal;
 
@@ -211,119 +202,87 @@ document.addEventListener('DOMContentLoaded', () => {
     statNumbers.forEach(num => statsObserver.observe(num));
   }
 
-  // --- 9. CERTIFICATE LIGHTBOX ---
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxClose = document.getElementById('lightbox-close');
-
-  window.openCertLightbox = function(card) {
-    const img = card.querySelector('img');
-    if (!img || !lightbox || !lightboxImg) return;
-
-    lightboxImg.src = img.src;
-    lightboxImg.alt = img.alt || 'Certificate View';
-    lightbox.classList.add('open');
-    lightbox.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    if (lightboxClose) lightboxClose.focus();
-  };
-
-  const closeLightbox = () => {
-    if (!lightbox) return;
-    lightbox.classList.remove('open');
-    lightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  };
-
-  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-  if (lightbox) {
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-  }
-
-  // --- 10. APPOINTMENT / OFFER LIGHTBOX ---
-  const offerLightbox = document.getElementById('offer-lightbox');
-  const offerLightboxImg = document.getElementById('offer-lightbox-img');
-  const offerLightboxTitle = document.getElementById('offer-lightbox-title');
-  const offerLightboxClose = document.getElementById('offer-lightbox-close');
-
-  window.openOffer = function(src, title) {
-    if (!offerLightbox || !offerLightboxImg) return;
-
-    offerLightboxImg.src = src;
-    offerLightboxImg.alt = title;
-    if (offerLightboxTitle) offerLightboxTitle.textContent = title;
-    offerLightbox.classList.add('open');
-    offerLightbox.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    if (offerLightboxClose) offerLightboxClose.focus();
-  };
-
-  const closeOfferLightbox = () => {
-    if (!offerLightbox) return;
-    offerLightbox.classList.remove('open');
-    offerLightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  };
-
-  if (offerLightboxClose) offerLightboxClose.addEventListener('click', closeOfferLightbox);
-  if (offerLightbox) {
-    offerLightbox.addEventListener('click', (e) => {
-      if (e.target === offerLightbox) closeOfferLightbox();
-    });
-  }
-
-  // ESC key closes both modals
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (lightbox && lightbox.classList.contains('open')) closeLightbox();
-      if (offerLightbox && offerLightbox.classList.contains('open')) closeOfferLightbox();
-    }
-  });
-
-  // --- 11. TOAST NOTIFICATIONS HELPER ---
-  window.showToast = function(message, iconClass = 'fas fa-circle-check') {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerHTML = `<i class="${iconClass}"></i> <span>${message}</span>`;
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      if (toast.parentNode) {
-        toast.parentNode.removeChild(toast);
-      }
-    }, 3200);
-  };
-
-  // --- 12. COPY EMAIL ACTION ---
-  window.copyEmail = function(email) {
-    navigator.clipboard.writeText(email).then(() => {
-      window.showToast(`Email copied: ${email}`);
-    }).catch(() => {
-      window.showToast(`Contact: ${email}`);
-    });
-  };
-
-  // --- 13. COPY RESUME SUMMARY ACTION ---
-  window.copyResumeSummary = function() {
-    const summary = `# Onkar Dilip Jadhavar
+  // --- 8. COPY RESUME MARKDOWN ---
+  const copyMdBtn = document.getElementById('copy-markdown-btn');
+  if (copyMdBtn) {
+    copyMdBtn.addEventListener('click', () => {
+      const summary = `# Onkar Dilip Jadhavar
 **Generative AI Engineer & Full-Stack Developer**
-- **Education:** B.Tech Computer Science & Engineering (SGI Kolhapur, CGPA: 7.8, 3rd Year) | SSC: 95%
-- **Technical Stack:** Generative AI, Prompt Engineering, LLM Integration, Python, JavaScript, Modern HTML5/CSS3, REST APIs, Git.
-- **Core Strengths:** Technical Leadership, Team Management, High Confidence & Public Communication, Project Delivery.
-- **Experience:** Frontend Development Intern (Kinetrexa Software Pvt. Ltd.)
-- **Leadership & Honors:** College Ambassador (Techfest IIT Bombay), Campus Mantri (GeeksforGeeks), VP (CSESA), Magazine Secretary (Student Council)
-- **Contact:** onkarjadhavar23@gmail.com | +91 79729 61313 | linkedin.com/in/onkar-jadhavar-1b3b02345`;
+- **Education:** B.Tech in CSE (Sanjay Ghodawat Institute, CGPA: 7.8, 3rd Year) | SSC: 95.00% | HSC: 77.33%
+- **Specializations:** Generative AI, LLMs, Prompt Pipelines, React 18, Node.js, Python, Modern HTML5/CSS3, REST APIs.
+- **Experience:** AI & Web Developer Intern @ Kinetrexa (Sep 2024 – Present)
+- **Leadership:** Vice-President (CSESA), Magazine Secretary (Student Council), Campus Ambassador (Techfest IIT Bombay), Student Ambassador (GeeksforGeeks), Internshala Student Partner (ISP).
+- **Contact:** omkarjadhavar13@gmail.com | linkedin.com/in/onkarjadhavar | github.com/onkarjadhavar`;
 
-    navigator.clipboard.writeText(summary).then(() => {
-      window.showToast('Resume Summary copied to clipboard!');
-    }).catch(() => {
-      window.showToast('Failed to copy. Please try again.');
+      navigator.clipboard.writeText(summary).then(() => {
+        showToast('Resume Markdown copied to clipboard!');
+      }).catch(() => {
+        showToast('Failed to copy. Please try again.');
+      });
     });
-  };
+  }
 
 });
+
+// --- GLOBAL LIGHTBOX VIEWER ---
+window.openLightbox = function(src, caption) {
+  const modal = document.getElementById('lightbox-modal');
+  const img = document.getElementById('lightbox-img');
+  const cap = document.getElementById('lightbox-caption');
+
+  if (!modal || !img) return;
+
+  img.src = src;
+  img.alt = caption || 'Document Viewer';
+  if (cap) cap.textContent = caption || '';
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeLightbox = function() {
+  const modal = document.getElementById('lightbox-modal');
+  if (!modal) return;
+
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+};
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    window.closeLightbox();
+  }
+});
+
+// --- GLOBAL TOAST NOTIFICATION ---
+window.showToast = function(message, iconClass = 'fas fa-circle-check') {
+  let toast = document.getElementById('toast');
+  if (!toast) return;
+
+  toast.innerHTML = `<i class="${iconClass}"></i> <span>${message}</span>`;
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
+};
+
+// --- CONTACT FORM DISPATCH ---
+window.handleFormSubmit = function(e) {
+  e.preventDefault();
+  const name = document.getElementById('form-name')?.value || 'Friend';
+  const email = document.getElementById('form-email')?.value || '';
+  const message = document.getElementById('form-message')?.value || '';
+
+  const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+
+  window.open(`mailto:omkarjadhavar13@gmail.com?subject=${subject}&body=${body}`, '_blank');
+  window.showToast(`Thank you, ${name}! Your email client has been opened.`);
+
+  const form = document.getElementById('contact-form');
+  if (form) form.reset();
+};
