@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
 - **Specializations:** Generative AI, LLMs, Prompt Pipelines, React 18, Node.js, Python, Modern HTML5/CSS3, REST APIs.
 - **Experience:** AI & Web Developer Intern @ Kinetrexa (Sep 2024 – Present)
 - **Leadership:** Vice-President (CSESA), Magazine Secretary (Student Council), Campus Ambassador (Techfest IIT Bombay), Student Ambassador (GeeksforGeeks), Internshala Student Partner (ISP).
-- **Contact:** omkarjadhavar13@gmail.com | linkedin.com/in/onkarjadhavar | github.com/onkarjadhavar`;
+- **Contact:** onkarjadhavar23@gmail.com | linkedin.com/in/onkarjadhavar | github.com/onkarjadhavar`;
 
       navigator.clipboard.writeText(summary).then(() => {
         showToast('Resume Markdown copied to clipboard!');
@@ -598,18 +598,18 @@ window.showToast = function(message, iconClass = 'fas fa-circle-check') {
 
 // --- COPY CONTACT EMAIL HELPER ---
 window.copyContactEmail = function() {
-  const email = 'omkarjadhavar13@gmail.com';
+  const email = 'onkarjadhavar23@gmail.com';
   const copyText = document.getElementById('copy-email-text');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(email).then(() => {
       if (copyText) copyText.textContent = 'Copied!';
-      window.showToast('Email address copied to clipboard: omkarjadhavar13@gmail.com');
+      window.showToast('Email address copied to clipboard: onkarjadhavar23@gmail.com');
       setTimeout(() => {
         if (copyText) copyText.textContent = 'Copy Email';
       }, 2500);
     }).catch(() => {
-      window.showToast('Direct email: omkarjadhavar13@gmail.com');
+      window.showToast('Direct email: onkarjadhavar23@gmail.com');
     });
   } else {
     // Fallback for older browsers
@@ -620,12 +620,12 @@ window.copyContactEmail = function() {
     try {
       document.execCommand('copy');
       if (copyText) copyText.textContent = 'Copied!';
-      window.showToast('Email address copied: omkarjadhavar13@gmail.com');
+      window.showToast('Email address copied: onkarjadhavar23@gmail.com');
       setTimeout(() => {
         if (copyText) copyText.textContent = 'Copy Email';
       }, 2500);
     } catch (err) {
-      window.showToast('Direct email: omkarjadhavar13@gmail.com');
+      window.showToast('Direct email: onkarjadhavar23@gmail.com');
     }
     document.body.removeChild(tempInput);
   }
@@ -641,7 +641,7 @@ window.handleFormSubmit = function(e) {
   const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
   const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
 
-  window.open(`mailto:omkarjadhavar13@gmail.com?subject=${subject}&body=${body}`, '_blank');
+  window.open(`mailto:onkarjadhavar23@gmail.com?subject=${subject}&body=${body}`, '_blank');
   window.showToast(`Thank you, ${name}! Your email client has been opened.`);
 };
 
