@@ -682,9 +682,10 @@ code {
   animation: pulseBlink 2s infinite ease-in-out;
 }
 
+.profile-card-body,
 .profile-meta {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .profile-name {
@@ -692,39 +693,27 @@ code {
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
 }
 
+.profile-tagline,
 .profile-sub {
   font-size: 0.85rem;
-  color: var(--accent-secondary);
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.01em;
 }
 
-.tech-chip-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
-}
-
-.tech-chip {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle);
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+.profile-bio {
+  font-size: 0.8rem;
   color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 auto;
+  max-width: 320px;
 }
 
-.tech-chip i {
-  color: var(--accent-primary);
-  font-size: 0.85rem;
-}
-
+.profile-card-footer,
 .profile-actions {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
