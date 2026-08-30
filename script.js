@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     let width = 0;
     let height = 0;
+    let lastWidth = 0;
     let particles = [];
     let animationId = null;
     let isHeroVisible = true;
@@ -67,6 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const resizeCanvas = () => {
       const rect = heroSection.getBoundingClientRect();
+      const curWidth = Math.floor(rect.width);
+      // Prevent mobile address bar show/hide from triggering particle recreations
+      if (lastWidth > 0 && Math.abs(curWidth - lastWidth) < 10) return;
+      lastWidth = curWidth;
+
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = rect.width;
       height = rect.height;
@@ -78,21 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initParticles = () => {
       particles = [];
-      const count = Math.min(Math.floor((width * height) / 14000), 55);
+      const count = Math.min(Math.floor((width * height) / 18000), 38);
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.45,
-          vy: (Math.random() - 0.5) * 0.45,
-          radius: Math.random() * 1.5 + 0.8,
-          baseAlpha: Math.random() * 0.45 + 0.25
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 1.4 + 0.8,
+          baseAlpha: Math.random() * 0.4 + 0.2
         });
       }
     };
 
     const drawParticles = () => {
-      if (!isHeroVisible) return;
+      if (!isHeroVisible || document.hidden) return;
       ctx.clearRect(0, 0, width, height);
 
       // Connect near particles
@@ -129,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const dy = p1.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 115) {
-            const alpha = (1 - dist / 115) * 0.18;
+          if (dist < 110) {
+            const alpha = (1 - dist / 110) * 0.16;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -144,7 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
       animationId = requestAnimationFrame(drawParticles);
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resizeCanvas, 150);
+    });
+
     heroSection.addEventListener('mousemove', (e) => {
       const rect = heroSection.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
@@ -171,6 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }, { threshold: 0.05 });
       heroObserver.observe(heroSection);
     }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      } else if (isHeroVisible && !animationId) {
+        animationId = requestAnimationFrame(drawParticles);
+      }
+    });
 
     resizeCanvas();
     drawParticles();
@@ -576,9 +596,44 @@ window.showToast = function(message, iconClass = 'fas fa-circle-check') {
   }, 3200);
 };
 
-// --- CONTACT FORM DISPATCH ---
+// --- COPY CONTACT EMAIL HELPER ---
+window.copyContactEmail = function() {
+  const email = 'omkarjadhavar13@gmail.com';
+  const copyText = document.getElementById('copy-email-text');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(() => {
+      if (copyText) copyText.textContent = 'Copied!';
+      window.showToast('Email address copied to clipboard: omkarjadhavar13@gmail.com');
+      setTimeout(() => {
+        if (copyText) copyText.textContent = 'Copy Email';
+      }, 2500);
+    }).catch(() => {
+      window.showToast('Direct email: omkarjadhavar13@gmail.com');
+    });
+  } else {
+    // Fallback for older browsers
+    const tempInput = document.createElement('input');
+    tempInput.value = email;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+      document.execCommand('copy');
+      if (copyText) copyText.textContent = 'Copied!';
+      window.showToast('Email address copied: omkarjadhavar13@gmail.com');
+      setTimeout(() => {
+        if (copyText) copyText.textContent = 'Copy Email';
+      }, 2500);
+    } catch (err) {
+      window.showToast('Direct email: omkarjadhavar13@gmail.com');
+    }
+    document.body.removeChild(tempInput);
+  }
+};
+
+// --- CONTACT FORM DISPATCH (FALLBACK) ---
 window.handleFormSubmit = function(e) {
-  e.preventDefault();
+  if (e && e.preventDefault) e.preventDefault();
   const name = document.getElementById('form-name')?.value || 'Friend';
   const email = document.getElementById('form-email')?.value || '';
   const message = document.getElementById('form-message')?.value || '';
@@ -588,7 +643,5 @@ window.handleFormSubmit = function(e) {
 
   window.open(`mailto:omkarjadhavar13@gmail.com?subject=${subject}&body=${body}`, '_blank');
   window.showToast(`Thank you, ${name}! Your email client has been opened.`);
-
-  const form = document.getElementById('contact-form');
-  if (form) form.reset();
 };
+
